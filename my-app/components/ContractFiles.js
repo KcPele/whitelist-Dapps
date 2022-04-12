@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState  } from "react";
 import { ipfsContext } from "../context/IpfsUploadContext";
-import { providers, Contract } from "ethers";
+import { providers, Contract, ethers } from "ethers";
 import Web3Modal from "web3modal";
 import { abi, UPLOAD_CONTRACT_ADDRESS } from "../constants";
 
@@ -49,7 +49,8 @@ export default function ContractFile() {
       );
       // call the addAddressToWhitelist from the contract
       const _totalFiles = await uploadContract.totalFiles()
-      setTotalFiles(Math.floor(_ethers.utils.formatEther(_totalFiles.toString())))
+      _totalFiles = _totalFiles.toNumber()
+      setTotalFiles(_totalFiles)
       console.log("totalFiles", totalFiles)
      
     } catch (err) {
@@ -57,7 +58,7 @@ export default function ContractFile() {
     }
   };
  
-const getUploadedFile = async (id) => {
+const getAllUploadedFile = async () => {
 
     try{
         const signer = await getProviderOrSigner(true)
@@ -67,13 +68,86 @@ const getUploadedFile = async (id) => {
             abi,
             signer
         )
-        console.log(uploadContract)
-
+        
+        setLoading(true)
+        const response = await uploadContract.whoCanView(1)
+          
+        // wait for the transaction to get mined
+        setLoading(false)
+        console.log(response)
+        
+        
     } catch(err) {
         console.error(err)
     }
 }
+//set access users
+const setWhoCanSee = async (id, address) => {
 
+  try{
+      const signer = await getProviderOrSigner(true)
+
+      const uploadContract = new Contract(
+          UPLOAD_CONTRACT_ADDRESS,
+          abi,
+          signer
+      )
+      const tx = await uploadContract.setAccessUser(id, address)
+      setLoading(true);
+      // wait for the transaction to get mined
+      tx.wait()
+      setLoading(false)
+      console.log("the address can now see your private files", tx)
+      getWhoCanSee(id)
+  } catch(err) {
+      console.error(err)
+  }
+}
+
+const getWhoCanSee = async (id) => {
+  try {
+    // We need a Signer here since this is a 'write' transaction.
+    const signer = await getProviderOrSigner(true)
+    // Create a new instance of the Contract with a Signer, which allows
+    // update methods
+    const uploadContract = new Contract(
+      UPLOAD_CONTRACT_ADDRESS,
+      abi,
+      signer
+    );
+    // call the addAddressToWhitelist from the contract
+    const response = await uploadContract.getAccessUser(id)
+  console.log("the users that can see", response)
+   
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+//toggling privacy
+const togglePrivacy = async (id) => {
+  try{
+    const signer = await getProviderOrSigner(true)
+
+    const uploadContract = new Contract(
+        UPLOAD_CONTRACT_ADDRESS,
+        abi,
+        signer
+    )
+    console.log(uploadContract)
+    const tx = await uploadContract.toggleFilePrivacy(id)
+        setLoading(true);
+        // wait for the transaction to get mined
+      await tx.wait();
+      setLoading(false);
+      console.log("success", tx)
+      getWhoCanSee(id)
+      
+  } catch(err) {
+    console.error(err)
+}
+
+}
 //setting the files for uploading
 const handleUploadFiles = async () => {
     if(!fileUrl){
@@ -88,7 +162,13 @@ const handleUploadFiles = async () => {
             abi,
             signer
         )
-        console.log(uploadContract)
+        const tx = await uploadContract.setFileData(fileName, fileUrl, fileType);
+        setLoading(true);
+        // wait for the transaction to get mined
+      await tx.wait();
+      setLoading(false);
+      console.log("success", tx)
+      getTotalFileUploads()
 
     } catch(err) {
         console.error(err)
@@ -143,11 +223,17 @@ const handleUploadFiles = async () => {
   return (
     <div>
         {renderButton()}
+        {loading && <p>Loading...</p>}
         <button onClick={getTotalFileUploads}>TotalFiles</button>
-        <button onClick={() => getUploadedFile(1)}>Get Uploaded Fies</button>
-        <button onClick={handleUploadFiles}>Uploaded Fies</button>
-  
+        <button onClick={getAllUploadedFile}>Get Uploaded Fies</button>
+        { fileUrl && <button onClick={handleUploadFiles}>Uploaded Fies</button>}
+ <button onClick={() => togglePrivacy(1)}> Make Private</button>
+ <button onClick={() => getWhoCanSee(1)}> All who have access to that files</button>
+ <button onClick={() => setWhoCanSee(1, "0x2fae2a3aC4e8770b8641659f0669cFe8bfd60eA3")}> All who have access to that files</button>
+   
+ 
     </div>
+
   
 
   );
