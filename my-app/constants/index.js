@@ -1,57 +1,60 @@
 export const abi = [
+  {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "fileIdex",
+          "type": "uint256"
+        }
+      ],
+      "name": "getAccessUser",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
     {
       "inputs": [
         {
-          "internalType": "uint8",
-          "name": "_maxWhitelistedAddresses",
-          "type": "uint8"
+          "internalType": "uint256",
+          "name": "_fileIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_address",
+          "type": "address"
         }
       ],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "inputs": [],
-      "name": "addAddressToWhitelist",
+      "name": "setAccessUser",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "maxWhitelistedAddresses",
-      "outputs": [
-        {
-          "internalType": "uint8",
-          "name": "",
-          "type": "uint8"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "numAddressesWhitelisted",
-      "outputs": [
-        {
-          "internalType": "uint8",
-          "name": "",
-          "type": "uint8"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
+          "internalType": "string",
+          "name": "_name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_path",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_types",
+          "type": "string"
         }
       ],
-      "name": "whitelistedAddresses",
+      "name": "setFileData",
       "outputs": [
         {
           "internalType": "bool",
@@ -59,8 +62,90 @@ export const abi = [
           "type": "bool"
         }
       ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_fileIndex",
+          "type": "uint256"
+        }
+      ],
+      "name": "toggleFilePrivacy",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalFiles",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_fileIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_address",
+          "type": "address"
+        }
+      ],
+      "name": "whoCanView",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "path",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "types",
+              "type": "string"
+            },
+            {
+              "internalType": "bool",
+              "name": "isPrivate",
+              "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct UploadFile.DataFormat",
+          "name": "",
+          "type": "tuple"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     }
   ];
-export const WHITELIST_CONTRACT_ADDRESS = "0x8b9eb53A378294c8bc935F36C87302456CE8542A";
+export const UPLOAD_CONTRACT_ADDRESS = "0xE5f62c11f8B9f0668EE39CE4FCbC74Bd39C2CC6A";
