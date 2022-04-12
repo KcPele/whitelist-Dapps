@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 
-//contract address = 0x272DD03c2c8239c5FBf7a4eda40EC23eecCD8352
+//contract address = 0xd8C5dC7f98991f764Ec98416D546180c5668736A
 
 contract UploadFile {
     //task: upload files, retreive, share
@@ -26,7 +26,7 @@ contract UploadFile {
 
     //keeping track of the users with access
     mapping(address => mapping(uint256 => address[])) accessAddress;
-    DataFormat[] private fileFormat;
+    DataFormat[] public fileFormat;
 
     //or i clould also create a mapping of address to the struct and remove the owner file
     // so that it will be userUpload[msg.sender] it will reaturn all the user data format in an array

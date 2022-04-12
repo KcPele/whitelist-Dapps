@@ -14,6 +14,8 @@ export default function ContractFile() {
   const web3ModalRef = useRef();
   //total files
   const [totalFiles, setTotalFiles] = useState(0)
+  //all uploaded files
+  const [allUploadedFile, setAllUploadedFile] = useState([])
 
   //to get signer or provider
   const getProviderOrSigner = async (needSigner = false) => {
@@ -61,21 +63,23 @@ export default function ContractFile() {
 const getAllUploadedFile = async () => {
 
     try{
-        const signer = await getProviderOrSigner(true)
+        const provider = await getProviderOrSigner()
 
         const uploadContract = new Contract(
             UPLOAD_CONTRACT_ADDRESS,
             abi,
-            signer
+            provider
         )
         
         setLoading(true)
-        const response = await uploadContract.whoCanView(1)
-          
-        // wait for the transaction to get mined
+        const allFiles = []
+        for(let i=0; i < totalFiles; i++){
+          const response = await uploadContract.fileFormat(i)
+          allFiles.push(response)
+        }
+        console.log(totalFiles, 'total file')
+        setAllUploadedFile(allFiles)
         setLoading(false)
-        console.log(response)
-        
         
     } catch(err) {
         console.error(err)
@@ -142,6 +146,7 @@ const togglePrivacy = async (id) => {
       setLoading(false);
       console.log("success", tx)
       getWhoCanSee(id)
+      getAllUploadedFile()
       
   } catch(err) {
     console.error(err)
@@ -169,13 +174,23 @@ const handleUploadFiles = async () => {
       setLoading(false);
       console.log("success", tx)
       getTotalFileUploads()
+      await getTotalFileUploads()
+  
 
     } catch(err) {
         console.error(err)
     }
 
 }
-
+//display all fies
+const display = allUploadedFile.map(val => {
+  return (
+    <div key={val.name}>
+      <p>{val.name}</p>
+      <img src={val.path} width="200"/>
+    </div>
+  )
+})
   /*
     connectWallet: Connects the MetaMask wallet
   */
@@ -217,6 +232,9 @@ const handleUploadFiles = async () => {
             disableInjectedProvider: false,
           });
           connectWallet();
+          getTotalFileUploads()
+          getAllUploadedFile()
+          
         }
       }, [walletConnected]);
     
@@ -231,6 +249,10 @@ const handleUploadFiles = async () => {
  <button onClick={() => getWhoCanSee(1)}> All who have access to that files</button>
  <button onClick={() => setWhoCanSee(1, "0x2fae2a3aC4e8770b8641659f0669cFe8bfd60eA3")}> All who have access to that files</button>
    
+
+   {allUploadedFile && display}
+
+ 
  
     </div>
 

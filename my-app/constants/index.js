@@ -3,6 +3,45 @@ export const abi = [
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "fileFormat",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "path",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "types",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "isPrivate",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "fileIdex",
         "type": "uint256"
       }
@@ -138,4 +177,4 @@ export const abi = [
     "type": "function"
   }
 ]
-export const UPLOAD_CONTRACT_ADDRESS = "0x272DD03c2c8239c5FBf7a4eda40EC23eecCD8352";
+export const UPLOAD_CONTRACT_ADDRESS = "0xd8C5dC7f98991f764Ec98416D546180c5668736A";
