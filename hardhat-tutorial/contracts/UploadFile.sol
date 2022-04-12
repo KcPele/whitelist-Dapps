@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 
-//contract address = 0xE5f62c11f8B9f0668EE39CE4FCbC74Bd39C2CC6A
+//contract address = 0x272DD03c2c8239c5FBf7a4eda40EC23eecCD8352
 
 contract UploadFile {
     //task: upload files, retreive, share
@@ -75,9 +75,11 @@ contract UploadFile {
         }
 
         //return who can view
-        function whoCanView(uint _fileIndex, address _address) public view returns(DataFormat memory, string memory){
+        function whoCanView(uint _fileIndex) public view returns(DataFormat memory){
             //if file is private
             if(fileFormat[_fileIndex].isPrivate){
+                //the address of the owner of the file
+                address _address = fileFormat[_fileIndex].owner;
                 //check if the user address file list has u(msg.sender) as part of accessUsers
                 bool foundAccessAddress;
                 //loop through accessAddress to see if msg.snder is part of them
@@ -92,9 +94,9 @@ contract UploadFile {
                 }
                 require(foundAccessAddress, "Not allowed to view this file");
                 //emit event to notify the owner who viewed his file private file
-                return (fileFormat[_fileIndex], "private");
+                return fileFormat[_fileIndex];
             } else {
-                return (fileFormat[_fileIndex], "public");
+                return fileFormat[_fileIndex];
             }
             
         }
