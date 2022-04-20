@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-//0xCa445e7cF40d6caE1C949180E1C96e021d0Be954 contract address
+//0xcBf59519A95b9551a0c662328C858CcfE278F60d contract address
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -98,7 +98,6 @@ modifier activeProposalOnly(uint256 proposalIndex) {
 /// @return Returns the proposal index for the newly created proposal
 function createProposal(uint256 _nftTokenId)
     external
-    nftHolderOnly
     returns (uint256)
 {
     require(nftMarketplace.available(_nftTokenId), "NFT_NOT_FOR_SALE");
@@ -117,7 +116,6 @@ function createProposal(uint256 _nftTokenId)
 /// @param vote - the type of vote they want to cast
 function voteOnProposal(uint256 proposalIndex, Vote vote)
     external
-    nftHolderOnly
     activeProposalOnly(proposalIndex)
 {
     Proposal storage proposal = proposals[proposalIndex];
@@ -163,7 +161,6 @@ modifier inactiveProposalOnly(uint256 proposalIndex) {
 /// @param proposalIndex - the index of the proposal to execute in the proposals array
 function executeProposal(uint256 proposalIndex)
     external
-    nftHolderOnly
     inactiveProposalOnly(proposalIndex)
 {
     Proposal storage proposal = proposals[proposalIndex];
