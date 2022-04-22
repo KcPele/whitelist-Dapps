@@ -1,12 +1,12 @@
-import Head from "next/head";
+// import Head from "next/head";
 import Link from "next/link";
 import styles from "../styles/Home.module.css"
 export default function Home() {
   return (
     <>
-    <Head >
+    {/* <Head >
       <title>jemis listing</title>
-    </Head>
+    </Head> */}
     <div className={styles.main}>
      
       <h1>Home</h1>
