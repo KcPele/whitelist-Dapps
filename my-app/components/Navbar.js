@@ -10,9 +10,9 @@ export default function Navbar() {
         </div>
     <Link href={"/"}>Home</Link>
       
-        <Link href={"/about"}>About</Link>
+        <Link href={"/cryptodao"}>CryptoDao</Link>
        
-        <Link href={"/jemi"}>jemis listing</Link>
+        <Link href={"/cryptodev"}>CryptoDev</Link>
         
     </nav>
   )
